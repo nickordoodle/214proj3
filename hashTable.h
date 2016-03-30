@@ -18,18 +18,19 @@ struct Record {
 };
 
 
-typedef struct hashTable_ hashTable;
-struct hashTable {
+typedef struct hashTable_ HashTable;
+struct HashTable {
 	int size;
-	Record **table;	
+	int isInitialized;
+	Record *hashArray;	
 };
 
 
 Record *createRecord(char *fileName, int occurrences);
 void destroyRecord(Record *record);
-hashTable *createHashTable(int size);
+HashTable *createHashTable(int size);
 void destroyHashTable(hashTable *table);
-int addToHashTable(hashTable table, char *token, char *fileName);
+int addToHashTable(HashTable table, char *token, char *fileName);
 int createHashTable();
 int destroyHashTable();
 
