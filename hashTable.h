@@ -13,6 +13,7 @@ struct Record {
 	char *fileName;
 	int occurrences;
 	Record *next;
+	Record *prev;
 
 
 };
@@ -30,6 +31,8 @@ Record *createRecord(char *fileName, int occurrences);
 void destroyRecord(Record *record);
 HashTable *createHashTable(int size);
 void destroyHashTable(hashTable *table);
+int hashFunction(char *token);
+void swapRecords(Record *prev, Record *curr);
 int addToHashTable(HashTable table, char *token, char *fileName);
 int createHashTable();
 int destroyHashTable();
