@@ -20,7 +20,21 @@
 
 int main(int argc, char const *argv[]) {
 
-	//IMPLEMENT
+	/* IMPLEMENT: Should handle directories and files separately
+	    ex. For each new directory, add data to inverted index for all files
+	        in that directory
+
+	   Utilize <fts.h> library and <dirent.h> library for directory/file searching and manipulation
+	   Use opendir to check if file or directory
+	   REMEMBER:  The User gives us the directory or file to search
+
+	   If cannot find file or directory, just output cannot find directory
+	   Be mindful of permission(s) if user does not have access to open directory/file
+	   User input can be ABSOLUTE OR RELATIVE PATH(S), need to account for both
+
+	   If dir_type == DT_REG || DT_DIR, file or directory
+	*/
+
 
 	DIR *dir;
 	struct dirent *ent;

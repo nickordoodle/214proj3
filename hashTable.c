@@ -1,16 +1,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "hashTable.h"
 
 
 Record *createRecord(char *fileName, int occurrences){
 
-	Record record = malloc(sizeof(Record));
+	Record *record = malloc(sizeof(Record));
 	record->fileName = fileName;
 	record->occurrences = occurrences;
 	record->next = NULL;
 	record->prev = NULL;
 
+	return record;
 }
 
 
@@ -29,13 +31,12 @@ HashTable *createHashTable(int size){
 
 	/* Allocate the requested size of table, may vary depending on data size */
 	int arraySizeAllocation = size * sizeof(Record);
-	HashTable ht = malloc( arraySizeAllocation + (2 * sizeof(int)));
+	HashTable *ht = malloc(sizeof(HashTable));
 
 	ht->size = size;
 	ht->isInitialized = 1;
 
-	Record hashArray[size];
-	Record *arrayPtr = hashArray;
+	Record **arrayPtr = malloc(arraySizeAllocation * sizeof(Record));
 	ht->hashArray = arrayPtr;
 
 	return ht;
@@ -45,15 +46,16 @@ HashTable *createHashTable(int size){
 void destroyHashTable(HashTable *table){
 
 	int position = 0;
+	Record **hashArray = table->hashArray;
 
 	while(position != table->size){
 
-		if((hashArray + position)->next != NULL){
+		if(hashArray[position]->next != NULL){
 			/* TO IMPLEMENT: FREE EACH NODE IN LINKED LIST */
-		} else if((hashArray + position) != NULL){
+		} else if(hashArray[position] != NULL){
 
-			(hashArray + position) = NULL;
-			free(hashArray + position);
+			hashArray[position] = NULL;
+			free(hashArray[position]);
 			position++;
 		}
 
@@ -67,7 +69,7 @@ int hashFunction(char *token){
 	long hash = 5381;
     int c;
 
-    while (c = *token++)
+    while ((c = *token++))
         hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
 
     return hash;
@@ -92,13 +94,13 @@ void swapRecords(Record *prev, Record *curr){
 	Else, insert new record at the end of the list.
 
 */
-int addToHashTable(HashTable table, char *token, char *fileName){
+int addToHashTable(HashTable *table, char *token, char *fileName){
 
 	/* Should return a 'key' value to be inserted into the table */
 	int position = hashFunction(token);
 
-	Record *arrayPtr = table->hashArray;
-	Record *firstRecord = arrayPtr + position;
+	Record **arrayPtr = table->hashArray;
+	Record *firstRecord = arrayPtr[position];
 
 	Record *newRecord = malloc(sizeof(Record));
 	newRecord = createRecord(fileName, 1);
@@ -149,12 +151,12 @@ int addToHashTable(HashTable table, char *token, char *fileName){
 		/* Same file not found, add to front of linked list */
 		newRecord->next = curr;
 		curr->prev = newRecord;
-		(arrayPtr + position) = newRecord;
+		arrayPtr[position] = newRecord;
 
 	} else{
 
 		/* New token found so this is the first Record in this position */
-		(arrayPtr + position) = newRecord;
+		arrayPtr[position] = newRecord;
 
 	}
 

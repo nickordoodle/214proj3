@@ -8,7 +8,7 @@
  */
 
 typedef struct Record_ Record;
-struct Record {
+struct Record_ {
 
 	char *fileName;
 	int occurrences;
@@ -19,21 +19,18 @@ struct Record {
 };
 
 
-typedef struct hashTable_ HashTable;
-struct HashTable {
+typedef struct HashTable_ HashTable;
+struct HashTable_ {
 	int size;
 	int isInitialized;
-	Record *hashArray;	
+	Record **hashArray;	
 };
 
 
 Record *createRecord(char *fileName, int occurrences);
 void destroyRecord(Record *record);
-HashTable *createHashTable(int size);
-void destroyHashTable(hashTable *table);
 int hashFunction(char *token);
 void swapRecords(Record *prev, Record *curr);
-int addToHashTable(HashTable table, char *token, char *fileName);
-int createHashTable();
-int destroyHashTable();
-
+int addToHashTable(HashTable *table, char *token, char *fileName);
+HashTable *createHashTable(int size);
+void destroyHashTable(HashTable *table);
