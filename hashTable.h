@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 /* This is the data structure we 'hash' to and acts as a linked 
    list if the token is found in multiple files.  For example,
