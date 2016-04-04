@@ -21,7 +21,7 @@ void initializeSL(){
 /*current file will be the most recent so you only need to check there since each file is only opened once*/
 void recordRecord(Node node, char *filename){
 	if(strcmp(node->head->filename, filename){
-		head->occurrences++;
+		node->head->occurrences++;
 	}else{
 		Record *newRecord = malloc(sizeof(Record));
 		newRecord-> filename= filename;	
@@ -32,33 +32,8 @@ void recordRecord(Node node, char *filename){
 		node-> head = newToken;
 	}
 }
-void printTree(Node *node){/*created for testing purposes only*/
-        if(node->left != NULL)
-                printTree(node->left);
-        if(node -> right != NULL)
-                 printTree(node->right);
-        return;
-}
 
-void destroyTree(Node *node){
 
-	if (node == NULL) return;
- 
-    /* first delete both subtrees */
-    destroyTree(node->left);
-    destroyTree(node->right);
-   
-    /* then delete the node */
-    free(node);
-
-}
-/* Do null check on list, if not null then iterate
-   through the list */
-void SLDestroy(SortedListPtr list){
-
-	destroyTree(list->head);
-	
-} 
 
 Node *createNode(Node *parent, char *token, char *filename){
 	
@@ -79,23 +54,18 @@ Node *createNode(Node *parent, char *token, char *filename){
 	return newNode;
 }
 /*What is the purpose of parent here?*/
-int insertToken(CompareFuncT cf, Node *node, Node *parent, char *token, char *filename){
+int insertToken(CompareFuncT cf, char *token, char *filename){
+	
+	Node node = list->head;
+	void *nodeData = node->token;
+	int compareVal = cf(token, nodeData);
+	
 
-	Node *nodeParent = parent;
-	void *nodeData = node->data;
-	int compareVal = cf(data, nodeData);
+    	int returnVal = 0;
 
-    int returnVal = 0;
-
-    /* Empty tree, build here and successful insertion*/
-    if(node == NULL){ /*don't think this is needed anymore*/
-        node = createNode(node, token, filename);
-        return 1;
-    }
 
     /* Insert into left subtree */
     if(compareVal < 0){
-    	/*nodeParent = node;*/
     	if(node -> left  == NULL){
                 node -> left = createNode(node, token, filename);
                 returnVal = 1;
@@ -107,7 +77,6 @@ int insertToken(CompareFuncT cf, Node *node, Node *parent, char *token, char *fi
     } 
     /* Insert into right subtree */
     else if (compareVal > 0){   
-    	/*nodeParent = node;   */
     	if(node -> right == NULL){
                 node -> right = createNode(node, token, filename);
                 returnVal = 1;
@@ -117,7 +86,7 @@ int insertToken(CompareFuncT cf, Node *node, Node *parent, char *token, char *fi
         }
     	
     } 
-    /* Word has already previously occurred  */
+    /* Word has already previously occurred and records need to be updated */
     else {
     	recordRecord(Node,filename)
     	returnVal = 0;
@@ -126,29 +95,10 @@ int insertToken(CompareFuncT cf, Node *node, Node *parent, char *token, char *fi
     return returnVal;
 }
 
-Node *minValueNode(Node* node)
-{
-    Node* current = node;
- 
-    /* loop down to find the leftmost leaf */
-    while (current->left != NULL)
-        current = current->left;
- 
-    return current;
-}
 
 
-
-/* Uses the compare functions to determine where
-   to place the data 
-
-   MEAT OF THE PROGRAM.  Need to determine how to
-   sort the list while inserting new items.  We
-   could just iterate through each time but that is
-   inefficient.  Problem is that sorting algorithms
-   are harder to do with linked lists. So either
-   regular iteration or change implementation to use
-   linked lists. */
+/*   Checks for null BST and then send it to inserttoken to update the token information*/
+   
 int SLInsert(char* token, char* filename){
 
 	int returnVal = 0;
@@ -160,11 +110,30 @@ int SLInsert(char* token, char* filename){
 		return 1;
 	} 
 
-	returnVal = insertToken(list->compare, list->head, list->head, token, filename);
+	returnVal = insertToken(list->compare, list->head, token, filename);
 	
 
 	return returnVal;
 }
 
+/*this will be turned into how we get the information out of the BST not done yet*/
+void printTree(Node *node){/*created for testing purposes only*/
+        if(node->left != NULL)
+                printTree(node->left);
+        if(node -> right != NULL)
+                 printTree(node->right);
+        return;
+}
 
+void destroyTree(Node *node){
+
+	if (node == NULL) return;
+ 
+    /* first delete both subtrees */
+    destroyTree(node->left);
+    destroyTree(node->right);
+   
+    /* then delete the node */
+    free(node);
+}
 
