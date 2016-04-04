@@ -24,8 +24,8 @@ void destroyRecord(Record *record){
 }
 
 HashTable *createHashTable(int size){
-
-
+	
+	
 	/* Allocate the requested size of table, may vary depending on data size */
 	int arraySizeAllocation = size * sizeof(Record);
 	HashTable *ht = malloc(sizeof(HashTable));

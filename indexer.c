@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <dirent.h>
 #include "indexer.h"
-#include "fileManager.h"
 #include "hashTable.h"
 
 /* OVERALL ALGORITHM:
