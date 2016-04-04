@@ -7,14 +7,6 @@
 #include <stdlib.h>
 
 
-
-typedef int (*CompareFuncT)( void *, void * );
-typedef void (*DestructFuncT)( void * );
-
-
-
-
-
 /* Used to act as our data for the list with pointers to its adjacent 
    data Nodes */
 typedef struct Node Node;
@@ -40,9 +32,6 @@ struct Record_ {
 struct SortedList
 {
 	Node *head;
-	CompareFuncT compare;
-	DestructFuncT destroy;
-
 };
 typedef struct SortedList* SortedListPtr;
 
@@ -50,15 +39,12 @@ typedef struct SortedList* SortedListPtr;
 void recordRecord(Node node, char *filename);
 
 
-SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df);
 
-
+void initializeSL(){
+int insertToken(char *token, char *filename);
 int SLInsert(SortedListPtr list, void *newObj);
 
 
-
-
-int SLRemove(SortedListPtr list, void *newObj);
 
 
 
