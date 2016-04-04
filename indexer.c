@@ -95,7 +95,11 @@ void fileHandler(char *name){
 	char *buffer;
 
 	fp = fopen ( name , "r" );
-	if( !fp ) perror(name),exit(1);
+	if( !fp ) {
+
+		perror(name);
+		return;
+	}
 
 	/* Get size of file */
 	fseek( fp , 0L , SEEK_END);
@@ -169,6 +173,8 @@ void initGlobals(){
 
 int main(int argc, char const *argv[]) {
 
+	FILE *fp;
+
 	/* IMPLEMENT: Should handle directories and files separately
 	    ex. For each new directory, add data to inverted index for all files
 	        in that directory
@@ -198,6 +204,28 @@ int main(int argc, char const *argv[]) {
 	initGlobals();
 
 	/* Call our file manager functions on the input */
-	directoryHandler(argv[1]);
+	directoryHandler(argv[2]);
+
+	fp = fopen(argv[1], "r");
+
+	/* File exists already, ask for input again */
+	if (fp) {
+		/* Output error message */
+	} else {
+
+		/* Build the inverted index JSON formatted text file
+		   using the given file name */
+		if(!BST_head){
+			printf("Could not retrieve any data from the given directory or index: %s \n", argv[2]);
+		}
+
+		fp = fopen(argv[1], "w+");
+		writeToFile(BST_head, fp, getRightMostRecord(BST_head));
+
+	}
+
+	fclose(fp);
+
+	return 0;
 
 } 

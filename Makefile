@@ -6,6 +6,12 @@ all: indexer
 .PHONY: all
 .PHONY: clean
 
+testFile.o: testFile.c
+	$(COMPILER) $(CFLAGS) -c testFile.c
+
+testFile: testFile.o
+	$(COMPILER) $(CFLAGS) -o testFile testFile.o
+
 binary-search-tree.o: binary-search-tree.c binary-search-tree.h
 	$(COMPILER) $(CFLAGS) -c binary-search-tree.c
 

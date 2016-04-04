@@ -25,6 +25,8 @@ Record * createNewRecord(char *fileName, char *token, int occurrences, Record *n
 	Record *prev,
 	Record *left,
     Record *right);
+Record *getRightMostRecord(Record *record);
+void writeToFile(Record *record, FILE *fp, Record *righMostRecord);
 void PrintInorder(Record *record);
 void PrintPreorder(Record *record);
 void PrintPostorder(Record *record);

@@ -60,6 +60,7 @@ Record * createNewRecord(char *fileName, char *token, int occurrences, Record *n
     newRecord -> right = right;
     newRecord -> prev = prev;
     newRecord -> next = next;
+    return newRecord;
 
 }
 
@@ -239,15 +240,94 @@ Record * find(Record *record, char *token)
         }
 }
 
-void PrintInorder(Record *record)
+/*
+
+{"list" :[
+    {"word0" :[
+        {"filepath0" : count0},
+        {"filepath1" : count1}
+    ]},
+    {"word1" :[
+        {"filepath2" : count2},
+        {"filepath3" : count3},
+        {“filepath4” : count4}
+    ]}
+]}
+*/
+
+void printFilesAndOccurrences(Record *record, FILE *fp){
+
+    Record *curr = record;
+
+    do{
+
+        if(record->next == NULL)
+            fprintf(fp, "\t {\"%s\" : %d } \n", record->fileName, record->occurrences );
+        else
+            fprintf(fp, "\t {\"%s\" : %d } \n", record->fileName, record->occurrences );
+
+
+        curr = curr->next;
+
+    } while(curr != NULL);
+
+
+}
+
+Record *getRightMostRecord(Record *record){
+
+    while(record->right != NULL)
+        record = record->right;
+
+    return record;
+}
+
+/*
+{  "." :[  
+         {"test/testFile3.c" : 1 } 
+]}, 
+{    "I" :[  
+         {"test/testFile3.c" : 1 } 
+]}, 
+{    "and" :[  
+         {"test/testFile3.c" : 1 } 
+]}, 
+{    "every" :[  
+         {"test/testFile3.c" : 1 } 
+]}, 
+{    "everyday" :[  
+         {"test/testFile3.c" : 1 } 
+]}, 
+{    "night" :[  
+         {"test/testFile3.c" : 1 } 
+]}, 
+{    "run" :[  
+         {"test/testFile3.c" : 1 } 
+]}, 
+{    "sleep" :[  
+         {"test/testFile3.c" : 1 } 
+]} 
+
+*/
+void writeToFile(Record *record, FILE *fp, Record *righMostRecord)
 {
         if(record==NULL)
         {
                 return;
         }
-        PrintInorder(record->left);
-        printf("%s ",record->token);
-        PrintInorder(record->right);
+        writeToFile(record->left, fp, righMostRecord);
+
+
+        fprintf(fp, "\t {\"%s\" :[  \n \t", record->token);
+        /* Print All filenames and occurrences here */
+        printFilesAndOccurrences(record, fp);
+
+        if (righMostRecord == record)
+            fprintf(fp, "]} \n");
+        else
+            fprintf(fp, "]}, \n");
+
+        writeToFile(record->right, fp, righMostRecord);
 }
 
 void PrintPreorder(Record *record)
