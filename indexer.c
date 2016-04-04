@@ -2,11 +2,10 @@
 #include <stdio.h>
 #include <dirent.h>
 #include "indexer.h"
-#include "hashTable.h"
+#include "binary-search-tree.h"
 
-static char *BST_head;
-static HashTable *ht;
-static int isProgramInit = 0;
+Record *BST_head;
+int isProgramInit;
 
 /* OVERALL ALGORITHM:
 	Keep Hash Table to keep list of "Records" which keep file names and times occurred
@@ -124,17 +123,24 @@ void fileHandler(char *name){
 		/* Add to binary search tree */
 		if(strlen(newToken) > 0){
 
-			
 			if(!isProgramInit){
 
-				initGlobals(newToken, name, fileSize);
-
-			} else {
-
-				/* TO IMPLEMENT: HASH/ADD TOKEN/ "RECORD" TO HASHMAP THEN
-				ADD TOKEN TO BINARY SEARCH TREE HERE */
-
+				BST_head = createNewRecord(name, newToken, 1, NULL, NULL, NULL, NULL);
+				isProgramInit = 1;
 			}
+
+			else{
+
+				Record *newRecord = insert(BST_head, newToken, name);
+		
+				if(!newRecord)
+					printf("The token: %s already exists. \n", newToken );
+				else
+					printf("Successfully inserted the token: %s from file: %s \n",
+				 	newToken, name);
+			}	
+
+			
 			
 		}
 
@@ -151,13 +157,10 @@ void fileHandler(char *name){
 }
 
 
-void initGlobals(char *token, char *fileName, int fileSize){
+void initGlobals(){
 
-	ht = createHashTable(fileSize);
-	BST_head = token;
-
-
-	isProgramInit = 1;
+	BST_head = NULL;
+	isProgramInit = 0;
 
 
 }
@@ -186,12 +189,13 @@ int main(int argc, char const *argv[]) {
 	//Create file for inverted index
 
 
-
+	   /*
 	if(argc < 3){
-		/* PRINT CUSTOM ERROR MESSAGE */
+		 PRINT CUSTOM ERROR MESSAGE 
 		return 0;
-	}
+	} */
 
+	initGlobals();
 
 	/* Call our file manager functions on the input */
 	directoryHandler(argv[1]);

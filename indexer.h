@@ -9,4 +9,4 @@ int compareCharArrayToString(char *name, char array[]);
 char *getNameOfFileOrDirectory(char *filePath);
 void directoryHandler(char *name);
 void fileHandler(char *name);
-void initGlobals(char *token, char *fileName, int fileSize);
+void initGlobals();
