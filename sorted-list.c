@@ -14,8 +14,6 @@ void initializeSL(){
 	}
 
 	list->head = NULL;
-	list->compare = cf;
-	list->destroy = df;
 }
 
 /*current file will be the most recent so you only need to check there since each file is only opened once*/
@@ -54,11 +52,11 @@ Node *createNode(Node *parent, char *token, char *filename){
 	return newNode;
 }
 /*What is the purpose of parent here?*/
-int insertToken(CompareFuncT cf, char *token, char *filename){
+int insertToken(char *token, char *filename){
 	
 	Node node = list->head;
 	void *nodeData = node->token;
-	int compareVal = cf(token, nodeData);
+	int compareVal = strcmp(token, nodeData);
 	
 
     	int returnVal = 0;
