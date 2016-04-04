@@ -4,6 +4,10 @@
 #include "indexer.h"
 #include "hashTable.h"
 
+static char *BST_head;
+static HashTable *ht;
+static int isProgramInit = 0;
+
 /* OVERALL ALGORITHM:
 	Keep Hash Table to keep list of "Records" which keep file names and times occurred
 	Keep Tokenizer binary search tree of all tokens
@@ -181,9 +185,7 @@ int main(int argc, char const *argv[]) {
 	//Build sorted list of descending order of tokens
 	//Create file for inverted index
 
-	static char *BST_head;
-	static hashTable *ht;
-	static int isProgramInit = 0;
+
 
 	if(argc < 3){
 		/* PRINT CUSTOM ERROR MESSAGE */
