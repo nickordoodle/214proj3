@@ -18,22 +18,6 @@ void initializeSL(){
 	list->destroy = df;
 }
 
-typedef struct Record_ Record;
-struct Record_ {
-
-	char *fileName;
-	int occurrences;
-	Record *next;
-	Record *prev;
-};
-
-/* combined token with node
-Token creatToken(char * token){
-	Token *newToken = malloc(sizeof(Token));
-	newToken-> token= token;
-	return Token;
-}*/
-
 /*current file will be the most recent so you only need to check there since each file is only opened once*/
 void recordRecord(Node node, char *filename){
 	if(strcmp(node->head->filename, filename){
@@ -138,9 +122,7 @@ int insertToken(CompareFuncT cf, Node *node, Node *parent, char *token, char *fi
     	recordRecord(Node,filename)
     	returnVal = 0;
     }
-    
-
-    /* CAUSING UNWANTED BEHAVIOR BECAUSE OF RECURSION CALLS */
+   
     return returnVal;
 }
 
