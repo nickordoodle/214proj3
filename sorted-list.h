@@ -44,14 +44,22 @@ typedef void (*DestructFuncT)( void * );
    data Nodes */
 typedef struct Node Node;
 struct Node {
-	void *data;
-	int visited;
+	char *token;
+	Record head;
 	Node *parent;
 	Node *left;
 	Node *right;
 
 };
 
+typedef struct Record_ Record;
+struct Record_ {
+
+	char *fileName;
+	int occurrences;
+	Record *next;
+	Record *prev;
+};
 
 /*
  * Sorted list type that will hold all the data to be sorted. 
@@ -71,6 +79,7 @@ struct SortedList
 typedef struct SortedList* SortedListPtr;
 
 
+void recordRecord(Node node, char *filename);
 /*
  * SLCreate creates a new, empty, 'SortedList'.
  *
@@ -86,10 +95,7 @@ typedef struct SortedList* SortedListPtr;
 SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df);
 
 
-/*
- * SLDestroy destroys a SortedList, freeing all dynamically-allocated memory.
- */
-void SLDestroy(SortedListPtr list);
+
 
 
 
@@ -121,85 +127,6 @@ int SLInsert(SortedListPtr list, void *newObj);
 
 int SLRemove(SortedListPtr list, void *newObj);
 
-
-
-/*======1: SortedList Iterator============================
-
- *
- * SortListIterator allows a SortedList to be easily 'walked' through,
- *  item by item using repeated calls to 'SLNextItem'.
- * Each 'SLNextItem' call to a SortedListIterator should result in the 
- *  next consecutive item in a SortedList, from the beginning to the end.
- * A SortedListIterator provides a one-way traversal through all of a SortedList
- */
-struct SortedListIterator
-{
-  	Node *head;
-        Node *curr;
-        void *startData;
-        char type;
-        int isFinished;
-        CompareFuncT compare;
-
-};
-typedef struct SortedListIterator* SortedListIteratorPtr;
-
-
-/*
- * SLCreateIterator creates a SortedListIterator for the SortedList pointed to by 'list'.
- *
- * SLCreateIterator should return a non-NULL SortedListIteratorPtr on success.
- * SLCreateIterator should return a NULL SortedListIteratorPtr if it could not
- *  construct a SortedListIterator, or if the SortedListPtr parameter 'list' is NULL.
- */
-
-SortedListIteratorPtr SLCreateIterator(SortedListPtr list);
-
-
-/*
- * SLDestroyIterator destroys a SortedListIterator pointed to by parameter 'iter'.
- *
- * SLDestroyIterator should destroy the SortedListIterator, but should NOT
- *  affect the list used to create the SortedListIterator in any way.
- */
-
-void SLDestroyIterator(SortedListIteratorPtr iter);
-
-
-
-/*===1.2: SortedList Iterator Get/Next Operations*/
-
-/*
- * SLNextItem returns a pointer to the data associated with the
- *  next item in the SortedListIterator's list
- *
- * SLNextItem should return a NULL if all of iter's elements have
- *  been iterated through.
- *
- * NB: Be sure to check the length of the list that SortedListIterator holds
- *         before attempting to access and return an item from it.
- *         If an item is removed from the list, making it shorter, be careful not
- *         to try to read and return an item off the end of the list.
- */
-
-void * SLNextItem(SortedListIteratorPtr iter);
-
-
-/*
- * SLGetItem should return a pointer to the current data item
- *   The current data item is the item that was most recently returned by SLNextItem
- *   SLGetItem should not alter the data item that SortedListIterator currently refers to
- *
- * SLGetItem should return a NULL pointer if the SortedListIterator has been advanced
- *  all the way through its list.
- *
- * NB: Be sure to check the length of the list that SortedListIterator holds
- *         before attempting to access and return an item from it.
- *         If an items are removed from the list, making it shorter, be careful not
- *         to try to read and return an item off the end of the list.
- */
-
-void * SLGetItem( SortedListIteratorPtr iter );
 
 
 
