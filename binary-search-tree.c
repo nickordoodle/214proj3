@@ -255,7 +255,7 @@ Record * find(Record *record, char *token)
 ]}
 */
 
-void printFilesAndOccurrences(Record *record, FILE *fp){
+void printFilesAndOccurrencesToFile(Record *record, FILE *fp){
 
     Record *curr = record;
 
@@ -320,7 +320,7 @@ void writeToFile(Record *record, FILE *fp, Record *righMostRecord)
 
         fprintf(fp, "\t {\"%s\" :[  \n \t", record->token);
         /* Print All filenames and occurrences here */
-        printFilesAndOccurrences(record, fp);
+        printFilesAndOccurrencesToFile(record, fp);
 
         if (righMostRecord == record)
             fprintf(fp, "]} \n");

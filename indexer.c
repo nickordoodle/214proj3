@@ -3,6 +3,7 @@
 #include <dirent.h>
 #include "indexer.h"
 #include "binary-search-tree.h"
+#include "tokenizer.h"
 
 Record *BST_head;
 int isProgramInit;
@@ -48,7 +49,7 @@ void directoryHandler(char *name){
 
    	if ((dir = opendir (entryName)) != NULL) {
 
-		/* print all the files and directories within directory */
+		/* Read the files and directories within directory */
    		while ((entry = readdir (dir)) != NULL) {
 
 	    	/* Ignore its own directory and parent directory */
@@ -57,7 +58,7 @@ void directoryHandler(char *name){
    				continue;
    		}
 
-			//Case for a file 
+		/* Case for files */
    		if (entry->d_type == DT_REG){
 
    			char *temp = malloc(sizeof(char) * strlen(entryName));
@@ -65,10 +66,10 @@ void directoryHandler(char *name){
    			fileHandler(strcat(strcat(temp, "/"), entry->d_name));
    			free(temp);
 
-   		} else if(entry->d_type == DT_DIR){
+   		} 
+   		/* Case for directories, recurse on on that directory */
+   		else if(entry->d_type == DT_DIR){
 
-		 	//Enter recursive directory call if name does
-		   	//not match
 		   	char *temp = malloc(sizeof(char) * strlen(entryName));
    			strcpy(temp, entryName);
 			directoryHandler(strcat(strcat(temp, "/"), entry->d_name));
@@ -83,7 +84,7 @@ void directoryHandler(char *name){
    } else {
 
 		/* could not open directory */
-   	perror ("");
+   		perror ("");
    }
 }
 
@@ -93,14 +94,12 @@ void directoryHandler(char *name){
    found a file that we are dealing with */
 void fileHandler(char *name){
 
-	// read in file
-		// tokenize words
-		// put words into index by filename
-
 	FILE *fp;
 	long fileSize;
 	char *buffer;
 
+	/* Try opening file in read mode and check
+	   if the file is NULL or is empty */
 	fp = fopen ( name , "r" );
 	if( !fp ) {
 
@@ -113,33 +112,33 @@ void fileHandler(char *name){
 	fileSize = ftell( fp );
 	rewind( fp );
 
-	/* allocate memory for entire content */
+	/* Allocate memory for entire buffer */
 	buffer = calloc( 1, fileSize+1 );
 	if( !buffer ) fclose(fp),fputs("memory alloc fails",stderr),exit(1);
 
-	/* copy the file into the buffer */
+	/* Copy the file into the buffer */
 	if( 1!=fread( buffer , fileSize, 1 , fp) )
 	fclose(fp),free(buffer),fputs("entire read fails",stderr),exit(1);
 
-	/* do your work here, buffer is a string contains the whole text */
-
+	/* Start tokenizing */
 	TokenizerT *tokenizer = TKCreate(buffer);
 
-	/* Iterates loop until end of array */
+	/* Iterates until no more tokens exist */
 	while (hasNextToken(tokenizer)){
 		
-		// Get token string, the type has already been printed 
+		/* Get the next token from input */
 		char *newToken = TKGetNextToken(tokenizer);
 
-		/* Add to binary search tree */
+		/* Ensure that the token is not empty string */
 		if(strlen(newToken) > 0){
 
+			/* Init globals if the program has not run through yet */
 			if(!isProgramInit){
 
 				BST_head = createNewRecord(name, newToken, 1, NULL, NULL, NULL, NULL);
 				isProgramInit = 1;
 			}
-
+			/* Create a record if the token does not exist */
 			else{
 
 				Record *newRecord = insert(BST_head, newToken, name);
@@ -160,23 +159,19 @@ void fileHandler(char *name){
 			
 	}
 	
+	/* Memory and file handling */
 	TKDestroy(tokenizer);
 
 	fclose(fp);
 	free(buffer);
-
 }
 
-
+/* Gives our global variables values to start the program */
 void initGlobals(){
 
 	BST_head = NULL;
 	isProgramInit = 0;
-
-
 }
-
-
 
 int main(int argc, char const *argv[]) {
 
@@ -184,6 +179,7 @@ int main(int argc, char const *argv[]) {
     size_t length = strlen(argv[2]);
 	char *dirStream = malloc(length + 1 + 1 ); 
 
+	/* Check if proper number of arguments are entered */
 	if(argc < 3){
 		printf("Bad input: Not enough arguments \n"); 
 		return 0;
@@ -191,7 +187,6 @@ int main(int argc, char const *argv[]) {
 
 	initGlobals();
 
-	/* Call our file manager functions on the input */
 
 
     char c = '/';
@@ -199,11 +194,12 @@ int main(int argc, char const *argv[]) {
     strcpy(dirStream + 1, argv[2]);
     dirStream[length + 1] = '\0';
 
+	/* Call our file manager functions on the input */
 	directoryHandler(argv[2]);
 
 	fp = fopen(argv[1], "r");
 
-	/* File exists already, ask for input again */
+	/* The output inverted index file exists already */
 	if (fp) {
 		printf("The file \"%s\" you tried creating already exists \n", argv[1]);
 		return 0;
@@ -215,6 +211,9 @@ int main(int argc, char const *argv[]) {
 			printf("Could not retrieve any data from the given directory or index: %s \n", argv[2]);
 		}
 
+		/* Uses our generated data structures and uses the binary search tree
+		   structure to iterate through all tokens, files, and counts to properly
+		   build the inverted index or JSON file */
 		fp = fopen(argv[1], "w+");
 		writeToFile(BST_head, fp, getRightMostRecord(BST_head));
 

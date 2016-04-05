@@ -3,7 +3,6 @@
 #include <string.h>
 #include <dirent.h>
 #include <fts.h>
-#include "tokenizer.h"
 
 int compareCharArrayToString(char *name, char array[]);
 char *getNameOfFileOrDirectory(char *filePath);
