@@ -44,7 +44,7 @@ void directoryHandler(char *name){
    	DIR *dir;
    	struct dirent *entry;
    	char *entryName  = malloc(sizeof(name));
-   	entryName = name;
+   	strcpy(entryName, name);
 
    	if ((dir = opendir (entryName)) != NULL) {
 
@@ -60,13 +60,20 @@ void directoryHandler(char *name){
 			//Case for a file 
    		if (entry->d_type == DT_REG){
 
-   			fileHandler(strcat(strcat(entryName, "/"), entry->d_name));
+   			char *temp = malloc(sizeof(char) * strlen(entryName));
+   			strcpy(temp, entryName);
+   			fileHandler(strcat(strcat(temp, "/"), entry->d_name));
+   			free(temp);
 
    		} else if(entry->d_type == DT_DIR){
 
 		 	//Enter recursive directory call if name does
-		   	//not match 
-			directoryHandler(strcat(strcat(entryName, "/"), entry->d_name));
+		   	//not match
+		   	char *temp = malloc(sizeof(char) * strlen(entryName));
+   			strcpy(temp, entryName);
+			directoryHandler(strcat(strcat(temp, "/"), entry->d_name));
+   			free(temp);
+
    		}
 
    	}
@@ -174,43 +181,32 @@ void initGlobals(){
 int main(int argc, char const *argv[]) {
 
 	FILE *fp;
+    size_t length = strlen(argv[2]);
+	char *dirStream = malloc(length + 1 + 1 ); 
 
-	/* IMPLEMENT: Should handle directories and files separately
-	    ex. For each new directory, add data to inverted index for all files
-	        in that directory
-
-	   Utilize <fts.h> library and <dirent.h> library for directory/file searching and manipulation
-	   Use opendir to check if file or directory
-	   REMEMBER:  The User gives us the directory or file to search
-
-	   If cannot find file or directory, just output cannot find directory
-	   Be mindful of permission(s) if user does not have access to open directory/file
-	   User input can be ABSOLUTE OR RELATIVE PATH(S), need to account for both
-
-	   If dir_type == DT_REG || DT_DIR, file or directory
-	*/
-
-	//Build HashMap
-	//Build sorted list of descending order of tokens
-	//Create file for inverted index
-
-
-	   /*
 	if(argc < 3){
-		 PRINT CUSTOM ERROR MESSAGE 
+		printf("Bad input: Not enough arguments \n"); 
 		return 0;
-	} */
+	} 
 
 	initGlobals();
 
 	/* Call our file manager functions on the input */
+
+
+    char c = '/';
+    dirStream[0] = c;
+    strcpy(dirStream + 1, argv[2]);
+    dirStream[length + 1] = '\0';
+
 	directoryHandler(argv[2]);
 
 	fp = fopen(argv[1], "r");
 
 	/* File exists already, ask for input again */
 	if (fp) {
-		/* Output error message */
+		printf("The file \"%s\" you tried creating already exists \n", argv[1]);
+		return 0;
 	} else {
 
 		/* Build the inverted index JSON formatted text file

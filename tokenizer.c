@@ -363,12 +363,12 @@ char *TKGetNextToken( TokenizerT * tk ) {
 
 	/* Ignore and skip any delimiters, they are not tokens */
 	counter = isDelimiter(currentChar);
-        	while(counter != 0 ){
+	while(counter != 0 ){
 		currentChar+=counter;
 		startChar+=counter;
 		counter = 0;
 		counter = isDelimiter(currentChar);
-             }
+     }
 
 	counter = 0;
 	if(*currentChar == '\0');
