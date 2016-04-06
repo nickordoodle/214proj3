@@ -225,12 +225,19 @@ Record * sortRecords(Record * head){
 
 char * basicFileName(char * name){
         int i = 0;
-        int start = 0;
         char * filename = NULL;
+        int foundSlash = 0;
         for(i = 0; i < strlen(name); i++)
-                if(*(name + i) == '/')
-                        filename = (name + i + 1);
-        filename = (char*) malloc(strlen(name) - start);
-        strcpy(filename, name + 1 + start);
+                if(*(name + i) == '/'){
+                    filename = (name + i + 1);
+                    foundSlash = 1;
+                }
+        filename = (char*) malloc(strlen(name) - i);
+
+        if(foundSlash)
+            strcpy(filename, name + 1 + i);
+        else
+            strcpy(filename, name);
+
         return filename;
 }
