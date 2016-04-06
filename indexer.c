@@ -126,8 +126,7 @@ void fileHandler(char *name){
 
 	/* Try opening file in read mode and check
 	   if the file is NULL or is empty */
-	char *fileName = basicFileName(name);
-	fp = fopen ( fileName , "r" );
+	fp = fopen ( name , "r" );
 	if( !fp ) {
 
 		perror(name);
