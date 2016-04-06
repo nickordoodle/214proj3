@@ -6,12 +6,6 @@ all: indexer
 .PHONY: all
 .PHONY: clean
 
-testFile.o: testFile.c
-	$(COMPILER) $(CFLAGS) -c testFile.c
-
-testFile: testFile.o
-	$(COMPILER) $(CFLAGS) -o testFile testFile.o
-
 sorted-list.o: sorted-list.c sorted-list.h
 	$(COMPILER) $(CFLAGS) -c sorted-list.c
 
@@ -25,4 +19,4 @@ indexer: indexer.o tokenizer.o sorted-list.o
 	$(COMPILER) $(CFLAGS) -o indexer tokenizer.o indexer.o sorted-list.o
 
 clean: 
-	rm -f *.o indexer 
+	rm -f *.o file.txt indexer 
