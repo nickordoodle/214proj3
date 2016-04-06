@@ -12,8 +12,8 @@ testFile.o: testFile.c
 testFile: testFile.o
 	$(COMPILER) $(CFLAGS) -o testFile testFile.o
 
-binary-search-tree.o: binary-search-tree.c binary-search-tree.h
-	$(COMPILER) $(CFLAGS) -c binary-search-tree.c
+sorted-list.o: sorted-list.c sorted-list.h
+	$(COMPILER) $(CFLAGS) -c sorted-list.c
 
 tokenizer.o: tokenizer.c tokenizer.h
 	$(COMPILER) $(CFLAGS) -c tokenizer.c
@@ -21,8 +21,8 @@ tokenizer.o: tokenizer.c tokenizer.h
 indexer.o: indexer.c indexer.h
 	$(COMPILER) $(CFLAGS) -c indexer.c
 
-indexer: indexer.o tokenizer.o binary-search-tree.o
-	$(COMPILER) $(CFLAGS) -o indexer tokenizer.o indexer.o binary-search-tree.o
+indexer: indexer.o tokenizer.o sorted-list.o
+	$(COMPILER) $(CFLAGS) -o indexer tokenizer.o indexer.o sorted-list.o
 
 clean: 
 	rm -f *.o indexer 

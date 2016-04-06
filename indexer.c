@@ -11,7 +11,7 @@ int isProgramInit;
 /* OVERALL ALGORITHM:
 	Keep Hash Table to keep list of "Records" which keep file names and times occurred
 	Keep Tokenizer binary search tree of all tokens
-
+testing
 	For user input (directory or file):
 		If(file)
 			Read/tokenize file
@@ -128,29 +128,21 @@ void fileHandler(char *name){
 		
 		/* Get the next token from input */
 		char *newToken = TKGetNextToken(tokenizer);
+		
+		/* Will return null if token is invalid*/
+                if(newToken == NULL)
+                        continue;
 
 		/* Ensure that the token is not empty string */
 		if(strlen(newToken) > 0){
+			
+			/*Adds the new/updates Token in BST*/
+			SLInsert(newToken, name);
 
 			/* Init globals if the program has not run through yet */
 			if(!isProgramInit){
-
-				BST_head = createNewRecord(name, newToken, 1, NULL, NULL, NULL, NULL);
 				isProgramInit = 1;
 			}
-			/* Create a record if the token does not exist */
-			else{
-
-				Record *newRecord = insert(BST_head, newToken, name);
-		
-				if(!newRecord)
-					printf("The token: %s already exists. \n", newToken );
-				else
-					printf("Successfully inserted the token: %s from file: %s \n",
-				 	newToken, name);
-			}	
-
-			
 			
 		}
 
@@ -207,15 +199,16 @@ int main(int argc, char const *argv[]) {
 
 		/* Build the inverted index JSON formatted text file
 		   using the given file name */
-		if(!BST_head){
+		if(isProgramInit == 1){
 			printf("Could not retrieve any data from the given directory or index: %s \n", argv[2]);
+			return 0;
 		}
 
 		/* Uses our generated data structures and uses the binary search tree
 		   structure to iterate through all tokens, files, and counts to properly
 		   build the inverted index or JSON file */
 		fp = fopen(argv[1], "w+");
-		writeToFile(BST_head, fp, getRightMostRecord(BST_head));
+		writeToFile(fp);
 
 	}
 
