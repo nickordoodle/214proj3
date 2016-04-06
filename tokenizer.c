@@ -451,17 +451,16 @@ char *TKGetNextToken( TokenizerT * tk ) {
 	/* Copy substring of the input to get new token value */
 	strncpy(newToken, startChar, newTokenSize - 1);
 	
-	if(isKeyWord(newToken)){
-		printf("keyword");
-	} else if(isalpha(*newToken)){
+	if(isalpha(*newToken)){
 		printf("word");
+	
+		/* Add '\0' to end of array for delimiter */
+		newToken[newTokenSize] = '\0';
+	
+		return newToken;
 	}
-	/* Add '\0' to end of array for delimiter */
-	newToken[newTokenSize] = '\0';
 	
-	return newToken;
-
-	
+	return NULL;
 }
 
 
