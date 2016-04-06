@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <dirent.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include "indexer.h"
 #include "sorted-list.h"
 #include "tokenizer.h"
@@ -13,7 +15,13 @@ int isProgramInit;
 			-Need to change program so that it outputs the whole pathname of the file, so we need to prepend the path name with the file
 			we are searching every time
 			*/
-			
+/*
+void checkMallocFail(void *item){
+
+	if(!item)
+		printf("Malloc has failed here");
+} */
+
 void directoryHandler(const char *name){
 
    	DIR *dir;
@@ -146,25 +154,33 @@ void initGlobals(){
 
 int main(int argc, char const *argv[]) {
 
-	FILE *fp;
-	char *fileName = malloc(sizeof(char) * strlen(argv[2]));
-	strcpy(fileName, argv[2]);
-
 	/* Check if proper number of arguments are entered */
 	if(argc < 3){
 		printf("Bad input: Not enough arguments \n"); 
 		return 0;
 	} 
 
+
+	FILE *fp;
+	char *fileName = (char *) malloc(strlen(argv[2]));
+	strcpy(fileName, argv[2]);
+
+	struct stat statbuf;
+	stat(fileName, &statbuf);
+
 	initGlobals();
 
-	/* Handles the case for a single file input */
-	if( (fp = fopen(fileName, "r")) )
-		fileHandler(fileName);
-	/* Call our file manager functions on the input */
-	else 
+	/* Check if initially directory or file */
+	if(S_ISDIR(statbuf.st_mode)){
 		directoryHandler(argv[2]);
+	}
+	/* Handles the case for a single file input */
+	else{
+		fileHandler(fileName);
 
+	}
+
+	/* Open the output */
 	fp = fopen(argv[1], "r");
 
 	/* The output inverted index file exists already */
@@ -188,6 +204,7 @@ int main(int argc, char const *argv[]) {
 
 	}
 
+	free(fileName);
 	fclose(fp);
 
 	return 0;

@@ -107,19 +107,17 @@ int SLInsert(char *token, char *filename){
         int returnVal = 0;
         int i = 0;
 
-        char * revisedName = basicFileName(filename);
-
         for(i = 0; i < strlen(token); i++)
                 *(token + i) = tolower(*(token + i));
 
         /* Empty tree, make new one */
         if(list == NULL){
                 initializeSL();
-                list->head = createNode(NULL, token, revisedName);
+                list->head = createNode(NULL, token, filename);
                 return 1;
         }
 
-        returnVal = insertToken(list->head, token, revisedName);
+        returnVal = insertToken(list->head, token, filename);
 
 
         return returnVal;
