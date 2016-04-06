@@ -11,7 +11,7 @@ int isProgramInit;
 /* OVERALL ALGORITHM:
 	Keep Hash Table to keep list of "Records" which keep file names and times occurred
 	Keep Tokenizer binary search tree of all tokens
-
+testing
 	For user input (directory or file):
 		If(file)
 			Read/tokenize file
