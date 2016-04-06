@@ -8,6 +8,27 @@
 Record *BST_head;
 int isProgramInit;
 
+/*
+To be done:
+Buffer might not be big enough to store the whole file. 
+Also within that you might risk cutting a token in half.
+	To avoid this if you have to have multiple buffers and your buffer ends with a nonwhite space character check the next buffer to see if it starts with a char if it does combine it with the previous.
+
+Deal with improper entries seems to be crashing with argv[2] = NULL
+Currently breaking on empty file
+Cannot deal with receiving a file
+
+Done:
+Need to check prints in correct order and can deal with a large amount of files with the same token
+Based off file name only if file name is the same across multiple directories then combine them.
+Ignore capitalization 
+Need to store file as just file name no directory information 
+It should only be saving words and numbers no bad tokens or symbols
+
+
+*/
+
+
 /* OVERALL ALGORITHM:
 	Keep Hash Table to keep list of "Records" which keep file names and times occurred
 	Keep Tokenizer binary search tree of all tokens
