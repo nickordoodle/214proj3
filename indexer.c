@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <dirent.h>
 #include "indexer.h"
-#include "binary-search-tree.h"
+#include "sorted-list.h"
 #include "tokenizer.h"
 
 Record *BST_head;
@@ -199,7 +199,7 @@ int main(int argc, char const *argv[]) {
 
 		/* Build the inverted index JSON formatted text file
 		   using the given file name */
-		if(isProgramInit == 1){
+		if(isProgramInit == 0){
 			printf("Could not retrieve any data from the given directory or index: %s \n", argv[2]);
 			return 0;
 		}
