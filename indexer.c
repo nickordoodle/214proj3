@@ -163,7 +163,7 @@ void fileHandler(char *name){
 	TKDestroy(tokenizer);
 
 	fclose(fp);
-	free(buffer);
+	free(buffer);	
 }
 
 /* Gives our global variables values to start the program */
