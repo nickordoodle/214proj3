@@ -225,12 +225,12 @@ Record * sortRecords(Record * head){
 
 char * basicFileName(char * name){
         int i = 0;
-        int start = 0;
+        //int start = 0;
         char * filename = NULL;
         for(i = 0; i < strlen(name); i++)
                 if(*(name + i) == '/')
-                        start = i;
-        filename = (char*) malloc(strlen(name) - start);
-        strcpy(filename, name + 1 + start);
+                        filename = (name + i + 1);
+        //filename = (char*) malloc(strlen(name) - start);
+        //strcpy(filename, name + 1 + start);
         return filename;
 }

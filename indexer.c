@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <dirent.h>
 #include "indexer.h"
-#include "binary-search-tree.h"
+#include "sorted-list.h"
 #include "tokenizer.h"
 
 Record *BST_head;
@@ -63,7 +63,9 @@ void directoryHandler(char *name){
 
    			char *temp = malloc(sizeof(char) * strlen(entryName));
    			strcpy(temp, entryName);
-   			fileHandler(strcat(strcat(temp, "/"), entry->d_name));
+  			strcat(temp, "/");
+   			strcat(temp, entry->d_name);
+   			fileHandler(temp);
    			free(temp);
 
    		} 
@@ -72,7 +74,9 @@ void directoryHandler(char *name){
 
 		   	char *temp = malloc(sizeof(char) * strlen(entryName));
    			strcpy(temp, entryName);
-			directoryHandler(strcat(strcat(temp, "/"), entry->d_name));
+   			strcat(temp, "/");
+   			strcat(temp, entry->d_name);
+			directoryHandler(temp);
    			free(temp);
 
    		}
@@ -100,7 +104,8 @@ void fileHandler(char *name){
 
 	/* Try opening file in read mode and check
 	   if the file is NULL or is empty */
-	fp = fopen ( name , "r" );
+	char *fileName = basicFileName(name);
+	fp = fopen ( fileName , "r" );
 	if( !fp ) {
 
 		perror(name);
