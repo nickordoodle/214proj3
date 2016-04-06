@@ -17,6 +17,7 @@ Also within that you might risk cutting a token in half.
 Deal with improper entries seems to be crashing with argv[2] = NULL
 Currently breaking on empty file
 Cannot deal with receiving a file
+Problem with some of the tokens they appear to not be proper tokens. Probably a problem with tokenizer.
 
 Done:
 Need to check prints in correct order and can deal with a large amount of files with the same token
