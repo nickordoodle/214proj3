@@ -165,6 +165,9 @@ int main(int argc, char const *argv[]) {
 	char *fileName = (char *) malloc(strlen(argv[2]));
 	strcpy(fileName, argv[2]);
 
+    if(*(fileName + strlen(fileName) - 1) == '/')
+    	fileName[strlen(fileName) - 1] = '\0';
+
 	struct stat statbuf;
 	stat(fileName, &statbuf);
 
@@ -172,7 +175,7 @@ int main(int argc, char const *argv[]) {
 
 	/* Check if initially directory or file */
 	if(S_ISDIR(statbuf.st_mode)){
-		directoryHandler(argv[2]);
+		directoryHandler(fileName);
 	}
 	/* Handles the case for a single file input */
 	else{
