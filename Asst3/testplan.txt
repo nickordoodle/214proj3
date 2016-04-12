@@ -1,0 +1,229 @@
+
+
+The following are a few sample test cases to ensure the program works correctly.
+
+Test Case 1) Simple file index --> ./indexer file.txt test.txt
+
+test.txt contains the following: {I am a test file for this program}.
+
+File Output: 
+
+{"list" :[  
+	{"a" :[  
+		{"test.txt" : 1}
+	]},
+	{"am" :[  
+		{"test.txt" : 1}
+	]},
+	{"file" :[  
+		{"test.txt" : 1}
+	]},
+	{"for" :[  
+		{"test.txt" : 1}
+	]},
+	{"i" :[  
+		{"test.txt" : 1}
+	]},
+	{"program" :[  
+		{"test.txt" : 1}
+	]},
+	{"test" :[  
+		{"test.txt" : 1}
+	]},
+	{"this" :[  
+		{"test.txt" : 1}
+	]}
+]}
+
+Test Case 2) Simple directory index --> ./indexer file.txt dirOne
+			The same output is done for ./indexer file.txt dirOne/ as well 
+
+Did not want to list all of the files and directories but this test case shows that our program
+works for duplicate tokens, the same tokens in other files, as well as proper JSON formatting for multiple files.  It shows the recursive subdirectory search as shown when it outputs tokens in dirOne/dirOne/**files** .  
+
+File Output:
+
+{"list" :[  
+	{"a" :[  
+		{"dirOne/dirOne/sample" : 4},
+		{"dirOne/dirOne/sample.c" : 1},
+		{"dirOne/testFile1.c" : 1}
+	]},
+	{"am" :[  
+		{"dirOne/dirOne/sample" : 4},
+		{"dirOne/dirOne/sample.c" : 1},
+		{"dirOne/testFile1.c" : 1}
+	]},
+	{"and" :[  
+		{"dirOne/testFile1.c" : 1},
+		{"dirOne/testFile2.c" : 1}
+	]},
+	{"annoying¸" :[  
+		{"dirOne/testFile2.c" : 1}
+	]},
+	{"computerk" :[  
+		{"dirOne/testFile3.c" : 1}
+	]},
+	{"computers" :[  
+		{"dirOne/testFile2.c" : 1}
+	]},
+	{"computerˆ" :[  
+		{"dirOne/testFile1.c" : 1}
+	]},
+	{"contain" :[  
+		{"dirOne/testFile1.c" : 1}
+	]},
+	{"crash" :[  
+		{"dirOne/testFile2.c" : 1}
+	]},
+	{"file" :[  
+		{"dirOne/dirOne/sample" : 4},
+		{"dirOne/dirOne/sample.c" : 1}
+	]},
+	{"fun" :[  
+		{"dirOne/testFile3.c" : 1}
+	]},
+	{"hard" :[  
+		{"dirOne/testFile3.c" : 1}
+	]},
+	{"i" :[  
+		{"dirOne/dirOne/sample" : 3},
+		{"dirOne/dirOne/sample.c" : 1}
+	]},
+	{"ih" :[  
+		{"dirOne/testFile1.c" : 1}
+	]},
+	{"in" :[  
+		{"dirOne/testFile2.c" : 1}
+	]},
+	{"include" :[  
+		{"dirOne/testFile3.c" : 1}
+	]},
+	{"input" :[  
+		{"dirOne/testFile1.c" : 1}
+	]},
+	{"is" :[  
+		{"dirOne/dirOne/sample" : 1},
+		{"dirOne/testFile2.c" : 1}
+	]},
+	{"just" :[  
+		{"dirOne/testFile2.c" : 1}
+	]},
+	{"me" :[  
+		{"dirOne/testFile2.c" : 1}
+	]},
+	{"messitall" :[  
+		{"dirOne/testFile2.c" : 1}
+	]},
+	{"of" :[  
+		{"dirOne/testFile3.c" : 1}
+	]},
+	{"ok21" :[  
+		{"dirOne/testFile2.c" : 1}
+	]},
+	{"program" :[  
+		{"dirOne/testFile1.c" : 1}
+	]},
+	{"programsare" :[  
+		{"dirOne/testFile3.c" : 1}
+	]},
+	{"programss" :[  
+		{"dirOne/testFile2.c" : 1}
+	]},
+	{"programs¸" :[  
+		{"dirOne/testFile3.c" : 1}
+	]},
+	{"sample" :[  
+		{"dirOne/dirOne/sample" : 4},
+		{"dirOne/dirOne/sample.c" : 1}
+	]},
+	{"simple" :[  
+		{"dirOne/testFile1.c" : 1}
+	]},
+	{"sometimesg" :[  
+		{"dirOne/testFile2.c" : 1}
+	]},
+	{"these" :[  
+		{"dirOne/testFile3.c" : 1}
+	]},
+	{"thisŸ" :[  
+		{"dirOne/testFile2.c" : 1}
+	]},
+	{"tol" :[  
+		{"dirOne/testFile2.c" : 1}
+	]},
+	{"topicss" :[  
+		{"dirOne/testFile3.c" : 1}
+	]},
+	{"types" :[  
+		{"dirOne/testFile3.c" : 1}
+	]},
+	{"up" :[  
+		{"dirOne/testFile2.c" : 1}
+	]},
+	{"very" :[  
+		{"dirOne/testFile3.c" : 2}
+	]},
+	{"xg" :[  
+		{"dirOne/testFile3.c" : 1}
+	]},
+	{"yea" :[  
+		{"dirOne/testFile2.c" : 1}
+	]}
+]}
+
+Test Case 3) Inverted Index File Already Exists --> ./indexer file.txt test.txt
+			 **Assume the file "file.txt" already exists in the current directory**
+
+Console Output: The output file you entered already exists, would you like to overwrite it? (y/n)
+If the user enters 'y', then it will overwrite the file with this message "File overwritten.". If the user enters 'n', then the program will exit with this message "You chose not to overwrite the file, exiting now"
+
+Test Case 4) Non Existing File or Directory --> ./indexer file.txt DoesNotExist/
+
+The program will check the current directory for the file or directory, and if not found then the following will be printed to the user.
+
+Console Output: DoesNotExist: No such file or directory
+
+Test Case 5) Relative Directory/File Search --> ./indexer file.txt dirOne/dirOne/sample.c
+
+This will only index the file specificed in the relative directory if it exists.
+
+File Output: 
+
+{"list" :[  
+	{"a" :[  
+		{"dirOne/dirOne/sample.c" : 1}
+	]},
+	{"am" :[  
+		{"dirOne/dirOne/sample.c" : 1}
+	]},
+	{"file" :[  
+		{"dirOne/dirOne/sample.c" : 1}
+	]},
+	{"i" :[  
+		{"dirOne/dirOne/sample.c" : 1}
+	]},
+	{"sample" :[  
+		{"dirOne/dirOne/sample.c" : 1}
+	]}
+]}
+
+Test Case 6) Huge Text Files --> Will not copy the big text files here but tested files over 100,000 lines long and the program still successfully finished in under a few seconds.
+
+On an extremely large file, here was the time it took using the time function: 
+real	0m5.524s
+user	0m4.080s
+sys	0m0.020s
+
+Test Case 7) Bad Input from User --> ./indexer file.txt
+
+Console Output: Bad input: Not enough arguments 
+
+Then the program exits.
+
+Test Case 8) Empty File Case --> ./indexer file.txt empty.txt
+
+Console Output: Empty File Found
+
+Then the program exits since an empty file is useless.
+
