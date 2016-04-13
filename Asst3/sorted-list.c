@@ -106,6 +106,8 @@ int SLInsert(char *token, char *filename){
 
         int returnVal = 0;
         int i = 0;
+        
+        char * revisedName = basicFileName(filename);
 
         for(i = 0; i < strlen(token); i++)
                 *(token + i) = tolower(*(token + i));
@@ -113,11 +115,11 @@ int SLInsert(char *token, char *filename){
         /* Empty tree, make new one */
         if(list == NULL){
                 initializeSL();
-                list->head = createNode(NULL, token, filename);
+                list->head = createNode(NULL, token, revisedName);
                 return 1;
         }
 
-        returnVal = insertToken(list->head, token, filename);
+        returnVal = insertToken(list->head, token, revisedName);
 
 
         return returnVal;
@@ -181,12 +183,14 @@ void printRecord(Record * curr, FILE *fp){
 
 }
 
-/* Used to maintain descending order of records (highest to lowest) in each linked list */
+/* Used to maintain descending order of records (highest to lowest) in each linked list if it has the same number of occurences its sorted alphabetically*/
 Record * sortRecords(Record * head){
 
     Record *temp;
     Record *sortedList;
     Record *curr;
+    int compareVal = 0;
+
 
     sortedList = head;
     head = head->next;
@@ -196,21 +200,34 @@ Record * sortRecords(Record * head){
 
     while(head != NULL){
     /*check to see if head should be added to the front of the new list*/
-            if(head->occurrences > sortedList->occurrences){
+            if(head->occurrences >= sortedList->occurrences){
+                compareVal = strcmp(head->fileName,sortedList->fileName);
+                if(compareVal <= 0 || head->occurrences == sortedList->occurrences){
                     temp = head->next;
                     head->next = sortedList;
 
                     sortedList = head;
                     head = temp;
                     continue;
+                }
             }
 
     /*Check to see where after the front head should be added to the new list*/
-    curr = sortedList;
+      curr = sortedList;
             while(curr->next != NULL){
     if( head->occurrences > curr->next->occurrences)
                             break;
-                    curr = curr->next;
+        if(head->occurrences == curr->next->occurrences){
+                        while(head->occurrences == curr->next->occurrences){
+                                compareVal = strcmp(head->fileName,curr->next->fileName);
+                                if(compareVal <= 0)
+                                        break;
+                                curr = curr->next;
+                        }
+                        break;
+                }
+
+                curr = curr->next;
             }
             if(curr->next != NULL)
                     curr->next->prev = head;
@@ -223,6 +240,7 @@ Record * sortRecords(Record * head){
 
     return sortedList;
 }
+
 
 
 int countTokens(Node *head, int count){
