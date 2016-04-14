@@ -107,7 +107,8 @@ int SLInsert(char *token, char *filename){
         int returnVal = 0;
         int i = 0;
         
-        char * revisedName = basicFileName(filename);
+        char * revisedName = malloc(strlen(filename)); 
+        basicFileName(filename, revisedName);
 
         for(i = 0; i < strlen(token); i++)
                 *(token + i) = tolower(*(token + i));
@@ -214,12 +215,13 @@ Record * sortRecords(Record * head){
 
     /*Check to see where after the front head should be added to the new list*/
       curr = sortedList;
-            while(curr->next != NULL){
-    if( head->occurrences > curr->next->occurrences)
+          while(curr->next != NULL){
+                if( head->occurrences > curr->next->occurrences)
                             break;
-        if(head->occurrences == curr->next->occurrences){
-                        while(head->occurrences == curr->next->occurrences){
-                                compareVal = strcmp(head->fileName,curr->next->fileName);
+                if(head->occurrences == curr->next->occurrences){
+                        while(curr->next != NULL)
+                                if(head->occurrences == curr->next->occurrences){
+                                        compareVal = strcmp(head->fileName,curr->next->fileName);
                                 if(compareVal <= 0)
                                         break;
                                 curr = curr->next;
@@ -229,6 +231,7 @@ Record * sortRecords(Record * head){
 
                 curr = curr->next;
             }
+
             if(curr->next != NULL)
                     curr->next->prev = head;
             temp = head->next;
@@ -262,21 +265,19 @@ int countTokens(Node *head, int count){
 
 }
 
-char * basicFileName(char * name){
+void basicFileName(char * name, char * revisedFile){
         int i = 0;
-        char * filename = NULL;
         int foundSlash = 0;
+
         for(i = 0; i < strlen(name); i++)
                 if(*(name + i) == '/'){
-                    filename = (name + i + 1);
-                    foundSlash = 1;
+                    //filename = (name + i + 1);
+                    foundSlash = i + 1;
                 }
-        filename = (char*) malloc(strlen(name) - i);
+        //filename = (char*) malloc(strlen(name) - i);
 
-        if(foundSlash)
-            strcpy(filename, name + 1 + i);
-        else
-            strcpy(filename, name);
+        strcpy(revisedFile, name + foundSlash);
 
-        return filename;
+        return;
 }
+
