@@ -265,18 +265,15 @@ int countTokens(Node *head, int count){
 
 }
 
-void basicFileName(char * name, char * revisedFile){
+void basicFileName(char * name, char * revisedName){
         int i = 0;
         int foundSlash = 0;
 
         for(i = 0; i < strlen(name); i++)
                 if(*(name + i) == '/'){
-                    //filename = (name + i + 1);
                     foundSlash = i + 1;
                 }
-        //filename = (char*) malloc(strlen(name) - i);
-
-        strcpy(revisedFile, name + foundSlash);
+        strcpy(revisedName, name + foundSlash);
 
         return;
 }
