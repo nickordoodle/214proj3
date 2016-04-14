@@ -91,7 +91,7 @@ void fileHandler(char *name){
 
 	if(!fileSize){
 		printf("Empty file found \n");
-		exit(0);
+		return;
 	}
 
 	/* Allocate memory for entire buffer */
