@@ -50,7 +50,7 @@ int SLInsert(char *token, char *filename);
 void printNode(Node * curr, FILE *fp, char *lastNode);
 void printRecord(Record * curr, FILE *fp);
 void writeToFile(FILE *fp);
-char * basicFileName(char * name);
+void basicFileName(char * name, char * revisedName);
 
 Record * sortRecords(Record * head);
 void destroyRecord(Record *record);
